@@ -88,6 +88,24 @@ public class JsonbDeserializingTest {
 
     }
 
+    @Test
+    public void testSerializationOfLocalMapInStringMapWithCustomSerialization() throws Exception {
+        TestObject to = new TestObject();
+        String TEST_KEY = "test";
+        to.setLocaleKeyMapInStringMap(Collections.singletonMap(TEST_KEY,
+                Collections.singletonMap(Locale.GERMAN, "localeKey")));
+
+        Jsonb jsonb = getJsonBWithLocalSerialization();
+        String json = jsonb.toJson(to);
+        System.out.println(json);
+
+        TestObject to2 = jsonb.fromJson(json, TestObject.class);
+        Class<?> localeClass = printKeyClass(to2.getLocaleKeyMapInStringMap().get(TEST_KEY));
+
+        Assert.assertEquals(Locale.class, localeClass);
+
+    }
+
     /**
      * cannot work (no deserializer for Locale)
      * 

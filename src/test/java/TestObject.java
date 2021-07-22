@@ -10,6 +10,7 @@ public class TestObject {
     private Map<ElementType, String> enumKeyMap;
     private Map<Pojo, String> pojoKeyMap;
     private Map<Locale, String> localeKeyMap;
+    private Map<String, Map<Locale, String>> localeKeyMapInStringMap;
     private Locale localeAttribute;
 
     public TestObject() {
@@ -56,6 +57,13 @@ public class TestObject {
     }
     public void setLocaleAttribute(Locale localeAttribute) {
         this.localeAttribute = localeAttribute;
+    }
+    public Map<String, Map<Locale, String>> getLocaleKeyMapInStringMap() {
+        return localeKeyMapInStringMap;
+    }
+    public void setLocaleKeyMapInStringMap(
+            Map<String, Map<Locale, String>> localeKeyMapInStringMap) {
+        this.localeKeyMapInStringMap = localeKeyMapInStringMap;
     }
 
 }
