@@ -142,6 +142,62 @@ public class JsonbDeserializingTest {
 
     }
 
+    @Test
+    public void testDeserializationOfBooleanMapFromKeyValuePairArray() throws Exception {
+        String value = "value";
+        String json = "{\"booleanKeyMap\":[{\"key\":true,\"value\":\"" + value + "\"}]}";
+        System.out.println(json);
+
+        Jsonb jsonb = JsonbProvider.provider().create().build();
+        TestObject to2 = jsonb.fromJson(json, TestObject.class);
+
+        Map<Boolean, String> booleanKeyMap = to2.getBooleanKeyMap();
+        Assert.assertEquals(1, booleanKeyMap.size());
+        Assert.assertEquals(value, booleanKeyMap.entrySet().iterator().next().getValue());
+        Class<?> keyClass = printKeyClass(booleanKeyMap);
+
+        Assert.assertEquals(Boolean.class, keyClass);
+    }
+
+    @Test
+    public void testDeserializationOfBooleanMapFromStringMap() throws Exception {
+        String value = "value";
+        String json = "{\"booleanKeyMap\":{\"true\":\"" + value + "\"}}";
+        System.out.println(json);
+
+        Jsonb jsonb = JsonbProvider.provider().create().build();
+        TestObject to2 = jsonb.fromJson(json, TestObject.class);
+
+        Map<Boolean, String> booleanKeyMap = to2.getBooleanKeyMap();
+        Assert.assertEquals(1, booleanKeyMap.size());
+        Assert.assertEquals(value, booleanKeyMap.entrySet().iterator().next().getValue());
+        Class<?> keyClass = printKeyClass(booleanKeyMap);
+
+        Assert.assertEquals(Boolean.class, keyClass);
+    }
+
+    /**
+     * does not work as boolean is not a valid json-key type
+     * 
+     * @throws Exception
+     */
+    @Test(expected = JsonbException.class)
+    public void testDeserializationOfBooleanMapFromBooleanMap() throws Exception {
+        String value = "value";
+        String json = "{\"booleanKeyMap\":{true:\"" + value + "\"}}";
+        System.out.println(json);
+
+        Jsonb jsonb = JsonbProvider.provider().create().build();
+        TestObject to2 = jsonb.fromJson(json, TestObject.class);
+
+        Map<Boolean, String> booleanKeyMap = to2.getBooleanKeyMap();
+        Assert.assertEquals(1, booleanKeyMap.size());
+        Assert.assertEquals(value, booleanKeyMap.entrySet().iterator().next().getValue());
+        Class<?> keyClass = printKeyClass(booleanKeyMap);
+
+        Assert.assertEquals(Boolean.class, keyClass);
+    }
+
     private Class<?> printKeyClass(Map<?, String> map) {
         Entry<?, String> e = map.entrySet().iterator().next();
         Class<? extends Object> class1 = e.getKey().getClass();
